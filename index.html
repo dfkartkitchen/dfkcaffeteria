@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DFK Caffetteria</title>
+<meta name="description" content="Kavárna v přízemí barokního domu v srdci starého města.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%98%95%3C/text%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('cms-wait')</script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0F1C11; --green-2:#17291A; --brass:#C19A5B; --brass-soft:#D9BD8C;
+  --cream:#F1E7D6; --cream-dim:rgba(241,231,214,.72); --espresso:#2B1D14;
+  --serif:"Gloock","Bodoni 72","Didot",Georgia,serif;
+  --sans:"Jost","Futura","Avenir Next","Segoe UI",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--green)}
+body{margin:0;background:var(--green);color:var(--cream);font-family:var(--sans);font-weight:300;font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:2px}
+
+/* header */
+.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  padding:calc(env(safe-area-inset-top,0px) + 1.1rem) clamp(1.2rem,4vw,3rem) 1.1rem;pointer-events:none}
+.top > *{pointer-events:auto}
+.top{transition:background .3s}
+.top.solid{background:rgba(15,28,17,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.mark{display:flex;flex-direction:column;align-items:center;text-decoration:none;line-height:1;text-shadow:0 1px 3px rgba(15,28,17,.9),0 0 14px rgba(15,28,17,.7)}
+.mark span{font-weight:500}
+.mark i{box-shadow:0 1px 3px rgba(15,28,17,.8)}
+.mark b{font-family:var(--serif);font-weight:400;font-size:1.65rem;letter-spacing:.02em}
+.mark span{font-size:.56rem;letter-spacing:.42em;margin-top:.3rem;padding-left:.42em}
+.mark i{display:block;width:1.4rem;height:1px;background:currentColor;margin-top:.35rem;opacity:.8}
+.book{font:inherit;font-size:.9rem;font-weight:400;color:var(--green);background:var(--cream);border:0;border-radius:999px;
+  padding:.6rem 1.25rem;text-decoration:none;transition:background .2s}
+.book:hover{background:var(--brass-soft)}
+
+/* scroll film */
+.film{position:relative;height:1000vh}
+.stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;background:var(--green)}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(15,28,17,.55) 0%,rgba(15,28,17,0) 22%,rgba(15,28,17,0) 55%,rgba(15,28,17,.7) 100%)}
+
+.hero{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:2rem;will-change:opacity,transform}
+/* soft dark pool behind the logo so it never melts into the roofs */
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 62% 48% at 50% 50%,rgba(15,28,17,.78) 0%,rgba(15,28,17,.55) 45%,rgba(15,28,17,0) 100%),
+    rgba(15,28,17,.18)}
+.hero > div{position:relative}
+.hero h1{margin:0;font-family:var(--serif);font-weight:400;line-height:.86;font-size:clamp(5rem,19vw,17rem);letter-spacing:-.01em;color:#F7EFE1;
+  text-shadow:0 2px 6px rgba(15,28,17,.55),0 .08em .5em rgba(15,28,17,.6)}
+.hero h1 small{display:block;font-family:var(--sans);font-weight:500;font-size:.14em;letter-spacing:.62em;padding-left:.62em;margin-top:.9em;
+  color:var(--brass-soft);text-shadow:0 1px 3px rgba(15,28,17,.9),0 0 18px rgba(15,28,17,.8)}
+.hero p{margin:1.6rem auto 0;max-width:30ch;font-size:clamp(1.05rem,1.7vw,1.25rem);font-weight:400;color:#F7EFE1;
+  text-shadow:0 1px 3px rgba(15,28,17,.95),0 0 20px rgba(15,28,17,.85)}
+.hint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 2rem);transform:translateX(-50%);
+  font-size:.85rem;font-weight:400;color:var(--cream);text-shadow:0 1px 3px rgba(15,28,17,.95),0 0 14px rgba(15,28,17,.8);display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.hint::after{content:"";width:1px;height:2.6rem;background:linear-gradient(var(--cream),transparent);animation:drip 2.2s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+.beat{position:absolute;max-width:min(30rem,86vw);opacity:0;will-change:opacity,transform}
+.beat h2{margin:0 0 .7rem;font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5.2vw,4.4rem);line-height:1;
+  text-shadow:0 2px 24px rgba(15,28,17,.55)}
+.beat p{margin:0;font-size:clamp(1rem,1.35vw,1.15rem);max-width:36ch;text-shadow:0 1px 14px rgba(15,28,17,.85)}
+.beat .where{display:block;font-size:.85rem;color:var(--brass-soft);margin-bottom:.9rem;font-weight:400}
+.pos-bl{left:clamp(1.2rem,6vw,5rem);bottom:clamp(5rem,14vh,9rem)}
+.pos-br{right:clamp(1.2rem,6vw,5rem);bottom:clamp(5rem,14vh,9rem);text-align:right}
+.pos-br p{margin-left:auto}
+.pos-tl{left:clamp(1.2rem,6vw,5rem);top:clamp(6rem,18vh,11rem)}
+.pos-c{left:50%;bottom:clamp(3rem,10vh,6rem);transform:translateX(-50%);text-align:center}
+.pos-c p{margin:0 auto}
+
+/* route progress — the journey really is a sequence */
+.route{position:absolute;right:clamp(.8rem,2.2vw,1.8rem);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1.1rem;z-index:5}
+.route button{all:unset;cursor:pointer;display:flex;align-items:center;gap:.7rem;justify-content:flex-end;font-size:.78rem;color:var(--cream-dim)}
+.route button span{opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s}
+.route button:hover span,.route button:focus-visible span,.route button.on span{opacity:1;transform:none}
+.route button i{width:7px;height:7px;border-radius:50%;border:1px solid var(--cream);transition:background .25s,transform .25s}
+.route button.on i{background:var(--brass);border-color:var(--brass);transform:scale(1.35)}
+.route button:focus-visible{outline:2px solid var(--brass);outline-offset:4px}
+.loader{position:absolute;left:0;bottom:0;height:2px;background:var(--brass);width:0;transition:width .2s,opacity .6s}
+
+/* after the film */
+.after{position:relative;background:radial-gradient(120% 60% at 50% 0%,var(--green-2),var(--green) 60%)}
+.wrap{width:min(72rem,100% - 2*clamp(1.2rem,5vw,3rem));margin:0 auto}
+.lead{padding:clamp(4rem,10vw,8rem) 0 clamp(3rem,7vw,5rem);text-align:center}
+.lead h2{margin:0 auto;max-width:16ch;font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,6vw,5rem);line-height:1.02}
+.lead p{max-width:52ch;margin:1.4rem auto 0;color:var(--cream-dim);font-size:1.12rem}
+
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);padding:clamp(2rem,5vw,4rem) 0}
+.menu h3{font-family:var(--serif);font-weight:400;font-size:1.9rem;margin:0 0 1.2rem;color:var(--brass-soft)}
+.menu ul{list-style:none;margin:0;padding:0}
+.menu li{display:flex;align-items:baseline;gap:.8rem;padding:.7rem 0;border-bottom:1px solid rgba(241,231,214,.12)}
+.menu li strong{font-weight:400}
+.menu li em{font-style:normal;color:var(--cream-dim);font-size:.92rem;display:block}
+.menu li .dots{flex:1;border-bottom:1px dotted rgba(241,231,214,.25);transform:translateY(-.3em)}
+.menu li .price{font-variant-numeric:tabular-nums;color:var(--cream)}
+
+.visit{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(2rem,6vw,5rem);align-items:center;padding:clamp(4rem,8vw,7rem) 0}
+.visit figure{margin:0;border-radius:2px;overflow:hidden;aspect-ratio:16/10;background:var(--green-2)}
+.visit figure img{width:100%;height:100%;object-fit:cover;display:block}
+.visit h3{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4vw,3.2rem);line-height:1.05;margin:0 0 1.2rem}
+.visit dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1.6rem}
+.visit dt{color:var(--cream-dim)}
+.visit dd{margin:0;font-variant-numeric:tabular-nums}
+.visit address{font-style:normal;margin:0 0 1.6rem;font-size:1.15rem}
+.visit .book{display:inline-block;margin-top:2rem}
+
+footer{border-top:1px solid rgba(241,231,214,.12);padding:2.2rem 0 calc(env(safe-area-inset-bottom,0px) + 2.2rem);color:var(--cream-dim);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+/* contact view */
+.contact{position:fixed;inset:0;z-index:50;overflow-y:auto;background:radial-gradient(120% 70% at 80% 0%,var(--green-2),var(--green) 65%);
+  padding:calc(env(safe-area-inset-top,0px) + 1.1rem) 0 calc(env(safe-area-inset-bottom,0px) + 3rem)}
+.contact[hidden]{display:none}
+.contact-bar{display:flex;align-items:center;justify-content:space-between;width:min(72rem,100% - 2*clamp(1.2rem,5vw,3rem));margin:0 auto}
+.back{display:inline-flex;align-items:center;gap:.55rem;font:inherit;font-size:.95rem;font-weight:400;color:var(--cream);background:transparent;
+  border:1px solid rgba(241,231,214,.35);border-radius:999px;padding:.55rem 1.15rem .55rem .85rem;cursor:pointer;transition:background .2s,border-color .2s}
+.back:hover{background:rgba(241,231,214,.08);border-color:var(--cream)}
+.back svg{width:1.1rem;height:1.1rem}
+.contact-body{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,5rem);align-items:start;padding-top:clamp(3rem,8vw,6rem)}
+.contact h1{margin:0 0 1rem;font-family:var(--serif);font-weight:400;font-size:clamp(2.8rem,7vw,5.4rem);line-height:.98}
+.contact .intro{color:var(--cream-dim);max-width:38ch;margin:0 0 2.6rem;font-size:1.1rem}
+.lines{display:grid;gap:1.6rem}
+.lines div span{display:block;font-size:.85rem;color:var(--brass-soft);margin-bottom:.2rem}
+.lines div p{margin:0;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.contact figure{margin:0;aspect-ratio:4/5;overflow:hidden;border-radius:2px;background:var(--green-2)}
+.contact figure img{width:100%;height:100%;object-fit:cover;display:block}
+.contact dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.6rem;font-size:1.05rem}
+.contact dt{color:var(--cream-dim)}
+.contact dd{margin:0;font-variant-numeric:tabular-nums}
+.contact .note{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid rgba(241,231,214,.14);color:var(--cream-dim);font-size:.95rem;max-width:44ch}
+
+@media (max-width:760px){
+  .contact-body{grid-template-columns:1fr}
+  .contact figure{aspect-ratio:16/10;order:-1}
+  .menu,.visit{grid-template-columns:1fr}
+  .pos-br,.pos-bl,.pos-tl{left:1.25rem;right:1.25rem;top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 5.2rem);text-align:left;max-width:none}
+  .pos-br p{margin-left:0}
+  .pos-c{bottom:calc(env(safe-area-inset-bottom,0px) + 5.2rem);width:calc(100% - 2.5rem)}
+}
+
+/* header links + e-shop view */
+.top-links{display:flex;align-items:center;gap:.6rem}
+.ghost{display:inline-flex;align-items:center;gap:.45rem;font-size:.9rem;font-weight:400;text-decoration:none;color:var(--cream);
+  border:1px solid rgba(241,231,214,.5);border-radius:999px;padding:.55rem 1.05rem .55rem .85rem;background:rgba(15,28,17,.35);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .2s,border-color .2s}
+.ghost:hover{background:rgba(241,231,214,.1);border-color:var(--cream)}
+.ghost svg{width:1.05rem;height:1.05rem}
+.shop-body{min-height:calc(100vh - 8rem);min-height:calc(100dvh - 8rem);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2.2rem;padding:3rem 0}
+.shop-body .bag{width:3.2rem;height:3.2rem;color:var(--brass-soft)}
+.shop-body h1{margin:0;max-width:12ch}
+.shop-body p{margin:-1rem 0 0;color:var(--cream-dim);max-width:34ch}
+
+/* ---------- mobile ---------- */
+@media (max-width:760px), (max-aspect-ratio:4/5){
+  body{font-size:1rem}
+  .film{height:720vh}
+  .top{padding:calc(env(safe-area-inset-top,0px) + .8rem) 1.1rem .8rem}
+  .mark b{font-size:1.35rem}
+  .mark span{font-size:.5rem}
+  .book{font-size:.85rem;padding:.55rem 1rem}
+  .top-links{gap:.45rem}
+  .ghost{font-size:.85rem;padding:.5rem .85rem .5rem .7rem}
+  .scrim{background:linear-gradient(180deg,rgba(15,28,17,.6) 0%,rgba(15,28,17,0) 18%,rgba(15,28,17,0) 45%,rgba(15,28,17,.88) 100%)}
+  .hero{padding:1.25rem}
+  .hero::before{background:radial-gradient(ellipse 95% 42% at 50% 50%,rgba(15,28,17,.8) 0%,rgba(15,28,17,.55) 50%,rgba(15,28,17,0) 100%),rgba(15,28,17,.22)}
+  .hero h1{font-size:clamp(4.5rem,27vw,9rem)}
+  .hero h1 small{font-size:.15em;letter-spacing:.5em;padding-left:.5em}
+  .hero p{max-width:24ch;margin-top:1.3rem}
+  .hint{bottom:calc(env(safe-area-inset-bottom,0px) + 3.6rem)}
+  .beat h2{font-size:clamp(2.1rem,10vw,2.8rem)}
+  .beat p{font-size:1rem}
+  .beat .where{font-size:.8rem;margin-bottom:.6rem}
+  /* chapter dots move to a row at the bottom */
+  .route{display:flex;flex-direction:row;gap:.15rem;top:auto;right:auto;left:50%;transform:translateX(-50%);
+    bottom:calc(env(safe-area-inset-bottom,0px) + .9rem)}
+  .route button{padding:.6rem}
+  .route button span{display:none}
+  .lead{padding:4.5rem 0 2rem}
+  .lead p{font-size:1.02rem}
+  .menu{gap:2.6rem;padding:1.5rem 0}
+  .menu h3{font-size:1.6rem;margin-bottom:.6rem}
+  .menu li{gap:.6rem}
+  .menu li .dots{min-width:.8rem}
+  .menu li .price{white-space:nowrap}
+  .visit{padding:3.5rem 0 4rem;gap:2rem}
+  .visit .book{display:block;text-align:center}
+  .contact-bar .mark{display:none}
+  .contact-body{padding-top:2rem;gap:2rem}
+  .contact h1{font-size:clamp(2.6rem,13vw,3.6rem)}
+  .contact .intro{margin-bottom:1.8rem}
+  .lines div p{font-size:1.1rem;overflow-wrap:anywhere}
+  footer .wrap{flex-direction:column;gap:.4rem}
+}
+@media (prefers-reduced-motion:reduce){.hint::after{animation:none}}
+/* texts come from content/site.json (Decap CMS); hidden for a moment so the old copy never flashes */
+html.cms-wait [data-cms],html.cms-wait [data-cms-list]{visibility:hidden}
+.beat [hidden]{display:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="mark" href="#top" aria-label="DFK Caffetteria, na začátek"><b data-cms="brand.name">DFK</b><span data-cms="brand.tagline">CAFFETTERIA</span><i></i></a>
+  <div class="top-links">
+    <a class="ghost" href="#eshop">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+      <span data-cms="header.eshop">E-shop</span>
+    </a>
+    <a class="book" href="#navsteva" data-cms="header.book">Rezervovat stůl</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="film" id="film" aria-label="Průlet z města až ke kávě">
+    <div class="stage">
+      <canvas id="c" aria-hidden="true"></canvas>
+      <div class="scrim"></div>
+
+      <div class="hero" id="hero">
+        <div>
+          <h1><span data-cms="hero.title">DFK</span><small data-cms="hero.subtitle">CAFFETTERIA</small></h1>
+          <p data-cms="hero.text">Kavárna v přízemí barokního domu v srdci starého města.</p>
+        </div>
+      </div>
+      <div class="hint" id="hint" data-cms="hero.hint">Pokračujte dolů</div>
+
+      <!-- TEXTY se upravují v /admin (soubor content/site.json); data-in / data-out = část videa 0–1 -->
+      <div class="beat pos-bl" data-in=".1" data-out=".24">
+        <span class="where" data-cms="beats.b1.where" data-opt>Náměstí, historické centrum</span>
+        <h2 data-cms="beats.b1.title">Pár kroků od radnice</h2>
+        <p data-cms="beats.b1.text" data-opt>Najdete nás v řadě měšťanských domů na náměstí, hned naproti morovému sloupu.</p>
+      </div>
+      <div class="beat pos-br" data-in=".25" data-out=".36">
+        <span class="where" data-cms="beats.b2.where" data-opt>Žlutý dům s ořechovými dveřmi</span>
+        <h2 data-cms="beats.b2.title">Stačí otevřít</h2>
+        <p data-cms="beats.b2.text" data-opt>Původní štukové průčelí, nové dřevěné portály a pár stolků venku na dlažbě.</p>
+      </div>
+      <div class="beat pos-tl" data-in=".41" data-out=".53">
+        <span class="where" data-cms="beats.b3.where" data-opt hidden></span>
+        <h2 data-cms="beats.b3.title">Pod klenbou</h2>
+        <p data-cms="beats.b3.text" data-opt>Velký prostor s klenutými stropy, zelenými sametovými lavicemi a spoustou rostlin.</p>
+      </div>
+      <div class="beat pos-bl" data-in=".57" data-out=".7">
+        <span class="where" data-cms="beats.b4.where" data-opt hidden></span>
+        <h2 data-cms="beats.b4.title">Bar a vitrína</h2>
+        <p data-cms="beats.b4.text" data-opt>Výběrová káva, čerstvé zákusky z naší cukrárny a sklenka vína na večer.</p>
+      </div>
+      <div class="beat pos-br" data-in=".74" data-out=".86">
+        <span class="where" data-cms="beats.b5.where" data-opt hidden></span>
+        <h2 data-cms="beats.b5.title">Espresso, jak má být</h2>
+        <p data-cms="beats.b5.text" data-opt>Pražíme v malých várkách a každý šálek připravujeme ručně.</p>
+      </div>
+      <div class="beat pos-c" data-in=".93" data-out="1.1">
+        <span class="where" data-cms="beats.b6.where" data-opt hidden></span>
+        <h2 data-cms="beats.b6.title">Těšíme se na vás</h2>
+        <p data-cms="beats.b6.text" data-opt hidden></p>
+      </div>
+
+      <nav class="route" aria-label="Kapitoly průletu">
+        <button data-at="0"><span data-cms="route.r1">Město</span><i></i></button>
+        <button data-at=".27"><span data-cms="route.r2">Průčelí</span><i></i></button>
+        <button data-at=".46"><span data-cms="route.r3">Interiér</span><i></i></button>
+        <button data-at=".62"><span data-cms="route.r4">Bar</span><i></i></button>
+        <button data-at=".8"><span data-cms="route.r5">Káva</span><i></i></button>
+        <button data-at="1"><span data-cms="route.r6">Návštěva</span><i></i></button>
+      </nav>
+      <div class="loader" id="loader"></div>
+    </div>
+  </section>
+
+  <div class="after">
+    <section class="wrap lead">
+      <h2 data-cms="lead.title">Káva, zákusky a čas na sebe</h2>
+      <p data-cms="lead.text">Sem patří krátký text o kavárně: kdo za ní stojí, odkud bereme kávu a proč jsme si vybrali právě tenhle dům.</p>
+    </section>
+
+    <section class="wrap menu" id="nabidka" aria-label="Nabídka">
+      <div>
+        <h3 data-cms="menu.col1.heading">Káva</h3>
+        <ul data-cms-list="menu.col1.items">
+          <li><div><strong>Espresso</strong><em>Výběrová směs dne</em></div><span class="dots"></span><span class="price">65 Kč</span></li>
+          <li><div><strong>Cappuccino</strong><em>Espresso, napěněné mléko</em></div><span class="dots"></span><span class="price">85 Kč</span></li>
+          <li><div><strong>Flat white</strong><em>Dvojité ristretto</em></div><span class="dots"></span><span class="price">95 Kč</span></li>
+          <li><div><strong>Filtrovaná káva</strong><em>V60 nebo batch brew</em></div><span class="dots"></span><span class="price">80 Kč</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-cms="menu.col2.heading">Z vitríny</h3>
+        <ul data-cms-list="menu.col2.items">
+          <li><div><strong>Pistáciový věneček</strong><em>Odpalované těsto, pistáciový krém</em></div><span class="dots"></span><span class="price">95 Kč</span></li>
+          <li><div><strong>Ovocný tartaletek</strong><em>Vanilkový krém, sezonní ovoce</em></div><span class="dots"></span><span class="price">105 Kč</span></li>
+          <li><div><strong>Máslový croissant</strong><em>Pečený každé ráno</em></div><span class="dots"></span><span class="price">59 Kč</span></li>
+          <li><div><strong>Čokoládový dort</strong><em>Hořká čokoláda, lískové ořechy</em></div><span class="dots"></span><span class="price">110 Kč</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap visit" id="navsteva" aria-label="Návštěva">
+      <figure><img id="facade" data-cms-img="gallery.facade" alt="Žluté barokní průčelí kavárny DFK Caffetteria s ořechovými dveřmi"></figure>
+      <div>
+        <h3 data-cms="visit.title">Kde nás najdete</h3>
+        <address data-cms="visit.address" data-ml>Horní náměstí 12<br>779 00 Olomouc</address>
+        <dl data-cms-list="hours">
+          <dt>Po–Pá</dt><dd>7:30–20:00</dd>
+          <dt>So</dt><dd>8:30–21:00</dd>
+          <dt>Ne</dt><dd>9:00–18:00</dd>
+        </dl>
+        <a class="book" href="#kontakt" data-cms="visit.button">Kontakt a rezervace</a>
+      </div>
+    </section>
+
+    <footer><div class="wrap"><span data-cms="footer.left">DFK Caffetteria</span><span data-cms="footer.right">Instagram · Facebook</span></div></footer>
+  </div>
+</main>
+
+<section class="contact" id="kontakt" hidden aria-labelledby="kontakt-h">
+  <div class="contact-bar">
+    <button class="back" id="back" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      <span data-cms="contact.back">Zpět na úvod</span>
+    </button>
+    <div class="mark" aria-hidden="true"><b data-cms="brand.name">DFK</b><span data-cms="brand.tagline">CAFFETTERIA</span><i></i></div>
+  </div>
+  <div class="wrap contact-body">
+    <div>
+      <h1 id="kontakt-h" data-cms="contact.title">Zavolejte nám</h1>
+      <p class="intro" data-cms="contact.intro">Stůl vám rádi podržíme. Na víkend doporučujeme rezervovat aspoň den předem.</p>
+      <div class="lines" data-cms-list="contact.lines">
+        <div><span>Telefon</span><p>+420 585 123 456</p></div>
+        <div><span>E-mail</span><p>rezervace@dfkcaffetteria.cz</p></div>
+        <div><span>Adresa</span><p>Horní náměstí 12, 779 00 Olomouc</p></div>
+        <div><span>Instagram</span><p>@dfkcaffetteria</p></div>
+      </div>
+      <p class="note" data-cms="contact.note">Skupiny nad osm lidí a soukromé akce domlouváme e-mailem. Ozveme se do druhého dne.</p>
+    </div>
+    <div>
+      <figure><img id="contact-img" data-cms-img="gallery.contact" alt="Bar kavárny DFK Caffetteria s vitrínou zákusků"></figure>
+      <dl style="margin-top:1.6rem" data-cms-list="hours">
+        <dt>Po–Pá</dt><dd>7:30–20:00</dd>
+        <dt>So</dt><dd>8:30–21:00</dd>
+        <dt>Ne</dt><dd>9:00–18:00</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="eshop" hidden aria-labelledby="eshop-h">
+  <div class="contact-bar" style="justify-content:center">
+    <div class="mark" aria-hidden="true"><b data-cms="brand.name">DFK</b><span data-cms="brand.tagline">CAFFETTERIA</span><i></i></div>
+  </div>
+  <div class="wrap shop-body">
+    <svg class="bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+    <h1 id="eshop-h" data-cms="eshop.title">Zde bude váš e-shop</h1>
+    <p data-cms="eshop.text">Káva, zrnka z naší pražírny a dárkové balíčky brzy i online.</p>
+    <button class="back" id="back-shop" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      <span data-cms="eshop.back">Zpět na úvod</span>
+    </button>
+  </div>
+</section>
+
+<script>
+// texts, colours and photos editable in /admin (Decap CMS) live in content/site.json
+const CONTENT = fetch('content/site.json', {cache: 'no-cache'}).then(r => r.ok ? r.json() : null).catch(() => null);
+(() => {
+  const root = document.documentElement, done = () => root.classList.remove('cms-wait');
+  setTimeout(done, 2500);
+  const get = (o, path) => path.split('.').reduce((a, k) => a == null ? a : a[k], o);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const txt = v => (v && v.text) || '';
+  // one editable text: {text, color}; empty colour keeps the design's own
+  const tag = (name, v, attrs = '') => `<${name}${attrs}${v && v.color ? ` style="color:${esc(v.color)}"` : ''}>${esc(txt(v))}</${name}>`;
+  function put(el, v){
+    if(!v || typeof v !== 'object') return;
+    const t = txt(v);
+    if(el.hasAttribute('data-ml')) el.innerHTML = esc(t).replace(/\n/g, '<br>'); else el.textContent = t;
+    el.style.color = v.color || '';
+    if(el.hasAttribute('data-opt')) el.hidden = !t;
+  }
+  const LISTS = {
+    'menu.col1.items': it => `<li><div>${tag('strong', it.name)}${txt(it.desc) ? tag('em', it.desc) : ''}</div><span class="dots"></span>${tag('span', it.price, ' class="price"')}</li>`,
+    'hours': it => tag('dt', it.day) + tag('dd', it.time),
+    'contact.lines': it => `<div>${tag('span', it.label)}${tag('p', it.value)}</div>`
+  };
+  LISTS['menu.col2.items'] = LISTS['menu.col1.items'];
+  CONTENT.then(c => {
+    if(c){
+      if(c.meta){
+        if(c.meta.title) document.title = c.meta.title;
+        if(c.meta.description) document.querySelector('meta[name="description"]').content = c.meta.description;
+      }
+      document.querySelectorAll('[data-cms]').forEach(el => put(el, get(c, el.dataset.cms)));
+      document.querySelectorAll('[data-cms-list]').forEach(el => {
+        const key = el.dataset.cmsList, items = get(c, key);
+        if(Array.isArray(items) && LISTS[key]) el.innerHTML = items.map(LISTS[key]).join('');
+      });
+      document.querySelectorAll('[data-cms-img]').forEach(el => { const g = get(c, el.dataset.cmsImg); if(g && g.alt) el.alt = g.alt; });
+    }
+    done();
+  });
+})();
+</script>
+<script>
+const COUNT = 121;
+const pad = i => String(i + 1).padStart(3, '0');
+// static photos (facade, bar) use the WebP desktop frames, which every browser can show
+const IMG = p => 'fallback/f_' + pad(Math.round((COUNT - 1) * p)) + '.webp';
+// for the rare browser without AVIF: a few key frames, cross-faded like a slideshow
+const KEYS = [0, 32, 55, 74, 96, 120];
+// AVIF where the browser supports it, WebP otherwise
+const FORMAT = new Promise(res => {
+  const im = new Image();
+  im.onload = () => res(im.width > 0 ? 'avif' : 'webp');
+  im.onerror = () => res('webp');
+  im.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADrbWV0YQAAAAAAAAAhaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAAAAAAAOcGl0bQAAAAAAAQAAAB5pbG9jAAAAAEQAAAEAAQAAAAEAAAETAAAAGAAAAChpaW5mAAAAAAABAAAAGmluZmUCAAAAAAEAAGF2MDFDb2xvcgAAAABqaXBycAAAAEtpcGNvAAAAFGlzcGUAAAAAAAAAAgAAAAIAAAAQcGl4aQAAAAADCAgIAAAADGF2MUOBAAwAAAAAE2NvbHJuY2x4AAEADQAGgAAAABdpcG1hAAAAAAAAAAEAAQQBAoMEAAAAIG1kYXQSAAoFGAA2BCAyDRgACiiihAAAsBNK214=';
+});
+(() => {
+  const MOBILE = matchMedia('(max-width:760px), (max-aspect-ratio:4/5)').matches;
+  let SET = [];
+  const N = COUNT, imgs = new Array(N), canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
+  const film = document.getElementById('film'), hero = document.getElementById('hero'), hint = document.getElementById('hint');
+  const beats = [...document.querySelectorAll('.beat')], dots = [...document.querySelectorAll('.route button')];
+  const loader = document.getElementById('loader');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let loaded = 0, target = 0, cur = 0, raf = 0, dpr = 1, W = 0, H = 0;
+
+  function load(i){ return new Promise(r => { const im = new Image(); im.onload = () => { imgs[i] = im; loaded++; loader.style.width = (loaded/N*100)+'%'; if(loaded===N) loader.style.opacity=0; r(); }; im.src = SET[i]; }); }
+  // first frame first, then a coarse pass, then the rest — scrubbing works almost immediately
+  FORMAT.then(ext => {
+    const dir = (MOBILE ? 'mobile/' : 'desktop/') + ext + '/';
+    SET = ext === 'avif'
+      ? Array.from({length: COUNT}, (_, i) => dir + 'f_' + pad(i) + '.avif')
+      : Array.from({length: COUNT}, (_, i) => { const k = KEYS.reduce((a, b) => Math.abs(b - i) < Math.abs(a - i) ? b : a); return 'fallback/f_' + pad(k) + '.webp'; });
+  load(0).then(() => { draw(); const order=[]; for(let s of [8,4,2,1]) for(let i=0;i<N;i+=s) if(!order.includes(i)&&i) order.push(i); (async()=>{ for(let k=0;k<order.length;k+=6) await Promise.all(order.slice(k,k+6).map(load)); })(); });
+  });
+  CONTENT.then(c => { document.getElementById('facade').src = (c && c.gallery && c.gallery.facade && c.gallery.facade.image) || IMG(0.28); });
+
+  function nearest(i){ if(imgs[i]) return imgs[i]; for(let d=1; d<N; d++){ if(imgs[i-d]) return imgs[i-d]; if(imgs[i+d]) return imgs[i+d]; } return null; }
+  function cover(im, a){
+    const s = Math.max(W/im.width, H/im.height), w = im.width*s, h = im.height*s;
+    ctx.globalAlpha = a; ctx.drawImage(im, (W-w)/2, (H-h)/2, w, h);
+  }
+  let lastW = 0, lastH = 0;
+  function resize(){ const cw = innerWidth, ch = canvas.clientHeight; if(cw === lastW && Math.abs(ch - lastH) < 2) return; lastW = cw; lastH = ch; dpr = Math.min(devicePixelRatio||1, 2); W = canvas.width = innerWidth*dpr; H = canvas.height = canvas.clientHeight*dpr; draw(); }
+  function draw(){
+    const f = cur*(N-1), i = Math.floor(f), t = f - i;
+    const a = nearest(i), b = nearest(Math.min(i+1, N-1));
+    if(!a) return;
+    ctx.fillStyle = '#0F1C11'; ctx.globalAlpha = 1; ctx.fillRect(0,0,W,H);
+    cover(a,1); if(b && b!==a && t>0.01) cover(b,t);
+    ctx.globalAlpha = 1;
+  }
+  function progress(){ const r = film.getBoundingClientRect(); return Math.min(1, Math.max(0, -r.top/(r.height - innerHeight))); }
+  function ui(p){
+    const h = Math.max(0, 1 - p/0.07);
+    hero.style.opacity = h; hero.style.transform = `scale(${1 + (1-h)*0.06})`; hint.style.opacity = h;
+    for(const el of beats){
+      const a = +el.dataset.in, b = +el.dataset.out, fade = 0.035;
+      let o = p<a||p>b ? 0 : Math.min(1,(p-a)/fade, (b-p)/fade);
+      el.style.opacity = o;
+      const base = el.classList.contains('pos-c') ? 'translateX(-50%) ' : '';
+      el.style.transform = base + `translateY(${(1-o)*18}px)`;
+    }
+    const at = dots.map(d => +d.dataset.at); let k = 0; at.forEach((v,j)=>{ if(p >= v - 0.06) k = j; });
+    dots.forEach((d,j)=>d.classList.toggle('on', j===k));
+  }
+  function tick(){
+    cur += (target - cur) * (reduce ? 1 : 0.14);
+    if(Math.abs(target-cur) < 0.0005) cur = target;
+    draw(); ui(cur);
+    raf = cur !== target ? requestAnimationFrame(tick) : 0;
+  }
+  const topBar = document.querySelector('.top');
+  function onScroll(){ topBar.classList.toggle('solid', film.getBoundingClientRect().bottom <= 90); target = progress(); if(!raf) raf = requestAnimationFrame(tick); }
+  dots.forEach(d => d.addEventListener('click', () => {
+    const top = film.offsetTop + (+d.dataset.at)*(film.offsetHeight - innerHeight) + (+d.dataset.at===1 ? innerHeight*0.9 : 0);
+    scrollTo({top, behavior: reduce ? 'auto' : 'smooth'});
+  }));
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', resize);
+  resize(); onScroll();
+})();
+
+// contact view: opens on #kontakt, "Zpět na úvod" returns to the top of the home page
+(() => {
+  const view = document.getElementById('kontakt'), back = document.getElementById('back');
+  let imgSet = false;
+  function open(){
+    if(!imgSet){ CONTENT.then(c => { document.getElementById('contact-img').src = (c && c.gallery && c.gallery.contact && c.gallery.contact.image) || IMG(0.66); }); imgSet = true; }
+    view.hidden = false; view.scrollTop = 0; document.body.style.overflow = 'hidden'; back.focus({preventScroll:true});
+  }
+  function close(){
+    view.hidden = true; document.body.style.overflow = '';
+    if(location.hash === '#kontakt'){ try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){} }
+    scrollTo({top:0, behavior:'auto'});
+  }
+  function sync(){ location.hash === '#kontakt' ? open() : (!view.hidden && close()); }
+  back.addEventListener('click', close);
+  addEventListener('keydown', e => { if(e.key === 'Escape' && !view.hidden) close(); });
+  addEventListener('hashchange', sync);
+  sync();
+})();
+
+// e-shop view: opens on #eshop, "Zpět na úvod" returns to the top of the home page
+(() => {
+  const view = document.getElementById('eshop'), back = document.getElementById('back-shop');
+  function open(){ view.hidden = false; view.scrollTop = 0; document.body.style.overflow = 'hidden'; back.focus({preventScroll:true}); }
+  function close(){
+    view.hidden = true; document.body.style.overflow = '';
+    if(location.hash === '#eshop'){ try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){} }
+    scrollTo({top:0, behavior:'auto'});
+  }
+  function sync(){ location.hash === '#eshop' ? open() : (!view.hidden && close()); }
+  back.addEventListener('click', close);
+  addEventListener('keydown', e => { if(e.key === 'Escape' && !view.hidden) close(); });
+  addEventListener('hashchange', sync);
+  sync();
+})();
+</script>
+<script>
+// Netlify Identity: after login (or accepting the invite e-mail) go to the CMS
+if (window.netlifyIdentity) {
+  netlifyIdentity.on('init', user => {
+    if (!user) netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
+  });
+}
+</script>
+</body>
+</html>

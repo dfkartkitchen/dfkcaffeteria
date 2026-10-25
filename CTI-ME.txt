@@ -1,0 +1,56 @@
+DFK Caffetteria – web se scroll animací (verze pro vlastní hosting)
+====================================================================
+
+OBSAH SLOŽKY
+  index.html        celý web (HTML, styly a skript v jednom souboru, cca 33 kB)
+  content/site.json texty, barvy textů a fotky (upravuje se přes /admin)
+  admin/            administrace Decap CMS (index.html + config.yml)
+  images/uploads/   fotky nahrané přes administraci
+  desktop/avif/     121 snímků průletu pro počítač, formát AVIF (cca 5 MB)
+  mobile/avif/      121 snímků na výšku pro mobil, AVIF (cca 2,6 MB)
+  fallback/         pár klíčových záběrů ve WebP (fotky na stránce a záloha
+                    pro velmi staré prohlížeče bez podpory AVIF)
+
+JAK TO FUNGUJE
+  Web sám pozná zařízení (šířka a orientace obrazovky) a stáhne jen jednu sadu:
+  počítač  -> desktop/avif   (cca 5 MB)
+  mobil    -> mobile/avif    (cca 2,6 MB)
+  Pokud prohlížeč neumí AVIF (dnes jen velmi staré verze), zobrazí se místo
+  plynulého průletu prolínání několika klíčových záběrů ze složky fallback.
+  Snímky se stahují postupně: první se zobrazí okamžitě, zbytek se dotahuje
+  během prohlížení.
+
+NAHRÁNÍ NA WEB
+  Nahrajte celou složku (index.html + složky desktop a mobile) na hosting tak,
+  jak je – strukturu složek neměňte. Funguje na jakémkoli statickém hostingu
+  (Wedos, Forpsi, Netlify, GitHub Pages, Cloudflare Pages…).
+  Netlify Drop (app.netlify.com/drop): zip rozbalte a přetáhněte myší
+  rozbalenou SLOŽKU dfk-caffetteria, ne zip soubor.
+
+TESTOVÁNÍ NA POČÍTAČI
+  Nejspolehlivější je spustit malý lokální server ve složce:
+    python -m http.server
+  a otevřít http://localhost:8000
+
+ÚPRAVA TEXTŮ A FOTEK (Decap CMS)
+  Texty, barvy textů a fotky se upravují v administraci na adrese
+    https://VAS-WEB.netlify.app/admin/
+  Data jsou v souboru content/site.json, web si je při načtení přečte.
+  Každý text má pole „Text“ a „Barva textu“ (prázdná barva = barva podle
+  designu). Nahrané fotky se ukládají do images/uploads.
+  Popisky během průletu: data-in / data-out (kdy se popisek ukáže, 0 až 1)
+  zůstávají v index.html u class="beat".
+
+  Jednorázové nastavení na Netlify (web musí být napojený na Git repozitář,
+  ne nahraný přes Netlify Drop):
+  1. Site configuration -> Identity -> Enable Identity
+  2. Registration -> Invite only (aby se nemohl registrovat kdokoli)
+  3. Services -> Git Gateway -> Enable Git Gateway
+  4. Identity -> Invite users -> pozvat e-mail klienta
+  Klient klikne na odkaz v pozvánce, nastaví heslo a dostane se do /admin.
+  Každé uložení v administraci = commit do repozitáře, Netlify web
+  automaticky znovu nasadí (cca do minuty).
+
+ODKAZY NA PODSTRÁNKY
+  .../index.html#kontakt   otevře kontakt
+  .../index.html#eshop     otevře e-shop

@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "title": "DFK Caffetteria",
+    "description": "Kavárna v přízemí barokního domu v srdci starého města."
+  },
+  "brand": {
+    "name": { "text": "DFK", "color": "" },
+    "tagline": { "text": "CAFFETTERIA", "color": "" }
+  },
+  "header": {
+    "eshop": { "text": "E-shop", "color": "" },
+    "book": { "text": "Rezervovat stůl", "color": "" }
+  },
+  "hero": {
+    "title": { "text": "DFK", "color": "" },
+    "subtitle": { "text": "CAFFETTERIA", "color": "" },
+    "text": { "text": "Kavárna v přízemí barokního domu v srdci starého města.", "color": "" },
+    "hint": { "text": "Pokračujte dolů", "color": "" }
+  },
+  "beats": {
+    "b1": {
+      "where": { "text": "Náměstí, historické centrum", "color": "" },
+      "title": { "text": "Pár kroků od radnice", "color": "" },
+      "text": { "text": "Najdete nás v řadě měšťanských domů na náměstí, hned naproti morovému sloupu.", "color": "" }
+    },
+    "b2": {
+      "where": { "text": "Žlutý dům s ořechovými dveřmi", "color": "" },
+      "title": { "text": "Stačí otevřít", "color": "" },
+      "text": { "text": "Původní štukové průčelí, nové dřevěné portály a pár stolků venku na dlažbě.", "color": "" }
+    },
+    "b3": {
+      "where": { "text": "", "color": "" },
+      "title": { "text": "Pod klenbou", "color": "" },
+      "text": { "text": "Velký prostor s klenutými stropy, zelenými sametovými lavicemi a spoustou rostlin.", "color": "" }
+    },
+    "b4": {
+      "where": { "text": "", "color": "" },
+      "title": { "text": "Bar a vitrína", "color": "" },
+      "text": { "text": "Výběrová káva, čerstvé zákusky z naší cukrárny a sklenka vína na večer.", "color": "" }
+    },
+    "b5": {
+      "where": { "text": "", "color": "" },
+      "title": { "text": "Espresso, jak má být", "color": "" },
+      "text": { "text": "Pražíme v malých várkách a každý šálek připravujeme ručně.", "color": "" }
+    },
+    "b6": {
+      "where": { "text": "", "color": "" },
+      "title": { "text": "Těšíme se na vás", "color": "" },
+      "text": { "text": "", "color": "" }
+    }
+  },
+  "route": {
+    "r1": { "text": "Město", "color": "" },
+    "r2": { "text": "Průčelí", "color": "" },
+    "r3": { "text": "Interiér", "color": "" },
+    "r4": { "text": "Bar", "color": "" },
+    "r5": { "text": "Káva", "color": "" },
+    "r6": { "text": "Návštěva", "color": "" }
+  },
+  "lead": {
+    "title": { "text": "Káva, zákusky a čas na sebe", "color": "" },
+    "text": { "text": "Sem patří krátký text o kavárně: kdo za ní stojí, odkud bereme kávu a proč jsme si vybrali právě tenhle dům.", "color": "" }
+  },
+  "menu": {
+    "col1": {
+      "heading": { "text": "Káva", "color": "" },
+      "items": [
+        { "name": { "text": "Espresso", "color": "" }, "desc": { "text": "Výběrová směs dne", "color": "" }, "price": { "text": "65 Kč", "color": "" } },
+        { "name": { "text": "Cappuccino", "color": "" }, "desc": { "text": "Espresso, napěněné mléko", "color": "" }, "price": { "text": "85 Kč", "color": "" } },
+        { "name": { "text": "Flat white", "color": "" }, "desc": { "text": "Dvojité ristretto", "color": "" }, "price": { "text": "95 Kč", "color": "" } },
+        { "name": { "text": "Filtrovaná káva", "color": "" }, "desc": { "text": "V60 nebo batch brew", "color": "" }, "price": { "text": "80 Kč", "color": "" } }
+      ]
+    },
+    "col2": {
+      "heading": { "text": "Z vitríny", "color": "" },
+      "items": [
+        { "name": { "text": "Pistáciový věneček", "color": "" }, "desc": { "text": "Odpalované těsto, pistáciový krém", "color": "" }, "price": { "text": "95 Kč", "color": "" } },
+        { "name": { "text": "Ovocný tartaletek", "color": "" }, "desc": { "text": "Vanilkový krém, sezonní ovoce", "color": "" }, "price": { "text": "105 Kč", "color": "" } },
+        { "name": { "text": "Máslový croissant", "color": "" }, "desc": { "text": "Pečený každé ráno", "color": "" }, "price": { "text": "59 Kč", "color": "" } },
+        { "name": { "text": "Čokoládový dort", "color": "" }, "desc": { "text": "Hořká čokoláda, lískové ořechy", "color": "" }, "price": { "text": "110 Kč", "color": "" } }
+      ]
+    }
+  },
+  "hours": [
+    { "day": { "text": "Po–Pá", "color": "" }, "time": { "text": "7:30–20:00", "color": "" } },
+    { "day": { "text": "So", "color": "" }, "time": { "text": "8:30–21:00", "color": "" } },
+    { "day": { "text": "Ne", "color": "" }, "time": { "text": "9:00–18:00", "color": "" } }
+  ],
+  "visit": {
+    "title": { "text": "Kde nás najdete", "color": "" },
+    "address": { "text": "Horní náměstí 12\n779 00 Olomouc", "color": "" },
+    "button": { "text": "Kontakt a rezervace", "color": "" }
+  },
+  "footer": {
+    "left": { "text": "DFK Caffetteria", "color": "" },
+    "right": { "text": "Instagram · Facebook", "color": "" }
+  },
+  "contact": {
+    "back": { "text": "Zpět na úvod", "color": "" },
+    "title": { "text": "Zavolejte nám", "color": "" },
+    "intro": { "text": "Stůl vám rádi podržíme. Na víkend doporučujeme rezervovat aspoň den předem.", "color": "" },
+    "lines": [
+      { "label": { "text": "Telefon", "color": "" }, "value": { "text": "+420 585 123 456", "color": "" } },
+      { "label": { "text": "E-mail", "color": "" }, "value": { "text": "rezervace@dfkcaffetteria.cz", "color": "" } },
+      { "label": { "text": "Adresa", "color": "" }, "value": { "text": "Horní náměstí 12, 779 00 Olomouc", "color": "" } },
+      { "label": { "text": "Instagram", "color": "" }, "value": { "text": "@dfkcaffetteria", "color": "" } }
+    ],
+    "note": { "text": "Skupiny nad osm lidí a soukromé akce domlouváme e-mailem. Ozveme se do druhého dne.", "color": "" }
+  },
+  "eshop": {
+    "title": { "text": "Zde bude váš e-shop", "color": "" },
+    "text": { "text": "Káva, zrnka z naší pražírny a dárkové balíčky brzy i online.", "color": "" },
+    "back": { "text": "Zpět na úvod", "color": "" }
+  },
+  "gallery": {
+    "facade": {
+      "image": "fallback/f_035.webp",
+      "alt": "Žluté barokní průčelí kavárny DFK Caffetteria s ořechovými dveřmi"
+    },
+    "contact": {
+      "image": "fallback/f_080.webp",
+      "alt": "Bar kavárny DFK Caffetteria s vitrínou zákusků"
+    }
+  }
+}

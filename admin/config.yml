@@ -1,0 +1,205 @@
+# Decap CMS – přihlášení přes Netlify Identity, ukládání přes Git Gateway
+backend:
+  name: git-gateway
+  branch: main
+
+locale: cs
+
+# nahrané fotky se ukládají sem
+media_folder: images/uploads
+public_folder: /images/uploads
+
+# pro lokální test bez Netlify: odkomentujte a spusťte `npx decap-server`
+# local_backend: true
+
+# Každý text má dvě pole: Text a Barva textu.
+# Prázdná barva = barva podle designu webu.
+x-text: &text
+  - { label: "Text", name: text, widget: string }
+  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+x-para: &para
+  - { label: "Text", name: text, widget: text }
+  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+x-opt: &opt
+  - { label: "Text (nepovinný)", name: text, widget: string, required: false }
+  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+x-optpara: &optpara
+  - { label: "Text (nepovinný)", name: text, widget: text, required: false }
+  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+
+x-beat: &beat
+  - { label: "Místo (malý nadpis)", name: where, widget: object, summary: "{{fields.text}}", fields: *opt }
+  - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
+  - { label: "Odstavec", name: text, widget: object, summary: "{{fields.text}}", fields: *optpara }
+
+x-menu-items: &menuItems
+  label: "Položky"
+  name: items
+  widget: list
+  summary: "{{fields.name.text}} – {{fields.price.text}}"
+  fields:
+    - { label: "Název", name: name, widget: object, summary: "{{fields.text}}", fields: *text }
+    - { label: "Popis", name: desc, widget: object, summary: "{{fields.text}}", fields: *opt }
+    - { label: "Cena", name: price, widget: object, summary: "{{fields.text}}", fields: *text }
+
+collections:
+  - name: web
+    label: "Obsah webu"
+    editor: { preview: false }
+    files:
+      - name: site
+        label: "Texty a fotky"
+        file: content/site.json
+        fields:
+          - label: "Záložka prohlížeče a vyhledávače"
+            name: meta
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Titulek stránky", name: title, widget: string }
+              - { label: "Popis pro Google", name: description, widget: text }
+
+          - label: "Logo"
+            name: brand
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Název (velké písmo)", name: name, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Podtitul (malé písmo)", name: tagline, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Horní lišta"
+            name: header
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Tlačítko E-shop", name: eshop, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Tlačítko rezervace", name: book, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Úvod (velký nápis)"
+            name: hero
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Hlavní nápis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Podnápis", name: subtitle, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Věta pod nápisem", name: text, widget: object, summary: "{{fields.text}}", fields: *para }
+              - { label: "Výzva „pokračujte dolů“", name: hint, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Popisky během průletu"
+            name: beats
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "1 – Náměstí", name: b1, widget: object, collapsed: true, fields: *beat }
+              - { label: "2 – Průčelí", name: b2, widget: object, collapsed: true, fields: *beat }
+              - { label: "3 – Interiér", name: b3, widget: object, collapsed: true, fields: *beat }
+              - { label: "4 – Bar", name: b4, widget: object, collapsed: true, fields: *beat }
+              - { label: "5 – Káva", name: b5, widget: object, collapsed: true, fields: *beat }
+              - { label: "6 – Závěr", name: b6, widget: object, collapsed: true, fields: *beat }
+
+          - label: "Kapitoly (tečky vpravo)"
+            name: route
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Kapitola 1", name: r1, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Kapitola 2", name: r2, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Kapitola 3", name: r3, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Kapitola 4", name: r4, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Kapitola 5", name: r5, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Kapitola 6", name: r6, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Text o kavárně"
+            name: lead
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Odstavec", name: text, widget: object, summary: "{{fields.text}}", fields: *para }
+
+          - label: "Nabídka a ceny"
+            name: menu
+            widget: object
+            collapsed: true
+            fields:
+              - label: "Levý sloupec"
+                name: col1
+                widget: object
+                fields:
+                  - { label: "Nadpis sloupce", name: heading, widget: object, summary: "{{fields.text}}", fields: *text }
+                  - *menuItems
+              - label: "Pravý sloupec"
+                name: col2
+                widget: object
+                fields:
+                  - { label: "Nadpis sloupce", name: heading, widget: object, summary: "{{fields.text}}", fields: *text }
+                  - *menuItems
+
+          - label: "Otevírací doba"
+            name: hours
+            widget: list
+            summary: "{{fields.day.text}}  {{fields.time.text}}"
+            fields:
+              - { label: "Dny", name: day, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Čas", name: time, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Kde nás najdete"
+            name: visit
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Adresa (každý řádek zvlášť)", name: address, widget: object, summary: "{{fields.text}}", fields: *para }
+              - { label: "Tlačítko", name: button, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Patička"
+            name: footer
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Vlevo", name: left, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Vpravo", name: right, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Stránka Kontakt"
+            name: contact
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Tlačítko zpět", name: back, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Úvodní věta", name: intro, widget: object, summary: "{{fields.text}}", fields: *para }
+              - label: "Kontaktní údaje"
+                name: lines
+                widget: list
+                summary: "{{fields.label.text}}: {{fields.value.text}}"
+                fields:
+                  - { label: "Popisek", name: label, widget: object, summary: "{{fields.text}}", fields: *text }
+                  - { label: "Hodnota", name: value, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Poznámka dole", name: note, widget: object, summary: "{{fields.text}}", fields: *para }
+
+          - label: "Stránka E-shop"
+            name: eshop
+            widget: object
+            collapsed: true
+            fields:
+              - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
+              - { label: "Odstavec", name: text, widget: object, summary: "{{fields.text}}", fields: *para }
+              - { label: "Tlačítko zpět", name: back, widget: object, summary: "{{fields.text}}", fields: *text }
+
+          - label: "Fotky"
+            name: gallery
+            widget: object
+            collapsed: true
+            fields:
+              - label: "Fotka průčelí (sekce Kde nás najdete)"
+                name: facade
+                widget: object
+                fields:
+                  - { label: "Fotka", name: image, widget: image, choose_url: false }
+                  - { label: "Popis fotky (pro nevidomé a Google)", name: alt, widget: string }
+              - label: "Fotka baru (stránka Kontakt)"
+                name: contact
+                widget: object
+                fields:
+                  - { label: "Fotka", name: image, widget: image, choose_url: false }
+                  - { label: "Popis fotky (pro nevidomé a Google)", name: alt, widget: string }

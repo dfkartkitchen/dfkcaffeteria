@@ -229,7 +229,11 @@
       },
       "text": {
         "text": "Najdete nás v řadě měšťanských domů na náměstí, hned naproti morovému sloupu.",
-        "color": ""
+        "color": "",
+        "bold": false,
+        "font": "lora",
+        "size": "1.15",
+        "underline": true
       }
     },
     "b2": {

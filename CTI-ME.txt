@@ -40,8 +40,9 @@ TESTOVÁNÍ NA POČÍTAČI
   V administraci je vlevo lišta se sekcemi webu, uprostřed formulář
   a vpravo živý náhled skutečného webu (přepínač Počítač / Mobil).
   Náhled ukazuje i neuložené změny a sám se posune k upravované části.
-  Každý text má pole „Text“ a „Barva textu“ (prázdná barva = barva podle
-  designu). Nahrané fotky se ukládají do images/uploads.
+  U každého textu lze nastavit barvu, písmo, velikost (v % oproti designu)
+  a přepínače Tučně / Kurzíva / Podtržené. Co nevyplníte, zůstane podle
+  designu. Nahrané fotky se ukládají do images/uploads.
   Popisky během průletu: data-in / data-out (kdy se popisek ukáže, 0 až 1)
   zůstávají v index.html u class="beat".
 

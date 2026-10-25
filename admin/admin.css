@@ -36,14 +36,20 @@ body.dfk-editing [class*="-ControlPaneContainer"] > [class*="-ControlContainer"]
 
 /* compact form: no grey bars on nested groups (lists keep theirs for the add button) */
 body.dfk-editing [class*="-ControlPaneContainer"] [class*="-TopBarContainer"]:not(:has([class*="-AddButton"])){display:none}
-/* text and its colour side by side */
-body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [class*="-ControlContainer"] > [class*="ColorSwatch"]){
-  display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:0 14px;align-items:start}
-body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [class*="-ControlContainer"] > [class*="ColorSwatch"]) > *{margin-top:0 !important}
+/* one text: the text on its own row, then colour, font and size, then the bold / italic / underline switches */
+body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [aria-label="color field"]){
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr) minmax(0,1.1fr);gap:0 12px;align-items:start}
+body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [aria-label="color field"]) > *{margin-top:0 !important;min-width:0}
+body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [aria-label="color field"]) > :first-child{grid-column:1 / -1;margin-bottom:12px !important}
+/* switches: label and toggle on one line, no box */
+body.dfk-editing [class*="-ControlPaneContainer"] [aria-label="boolean field"]{display:flex;align-items:center;gap:10px;margin-top:12px !important}
+body.dfk-editing [class*="-ControlPaneContainer"] [aria-label="boolean field"] > :last-child{border:0 !important;padding:0 !important;background:none !important;width:auto}
+body.dfk-editing [class*="-ControlPaneContainer"] [aria-label="boolean field"] label{background:none !important;color:#5A4A3C !important;padding:0 !important;margin:0 !important;font-size:12px}
+/* "(volitelný)" after every optional label is just noise here */
+body.dfk-editing [class*="-ControlPaneContainer"] label > span{display:none}
+/* empty font / size = the website's own look */
+body.dfk-editing [class*="-ControlPaneContainer"] [aria-label="select field"] [class*="-placeholder"]:empty::before{content:"Podle designu";color:#9B958C}
 body.dfk-editing [class*="-ControlPaneContainer"] textarea{min-height:84px !important}
-@media (max-width:1300px){
-  body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [class*="-ControlContainer"] > [class*="ColorSwatch"]){grid-template-columns:1fr}
-}
 /* the preview is the real website, Decap's scroll sync has nothing to sync */
 body.dfk-editing [class*="-ViewControls"] button:not([title="Přepnout náhled"]){display:none}
 /* sections with an empty required field */

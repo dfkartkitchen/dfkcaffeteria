@@ -312,7 +312,7 @@ html.cms-wait [data-cms],html.cms-wait [data-cms-list]{visibility:hidden}
       <figure><img id="facade" data-cms-img="gallery.facade" alt="Žluté barokní průčelí kavárny DFK Caffetteria s ořechovými dveřmi"></figure>
       <div>
         <h3 data-cms="visit.title">Kde nás najdete</h3>
-        <address data-cms="visit.address" data-ml>Horní náměstí 12<br>779 00 Olomouc</address>
+        <address data-cms="visit.address">Horní náměstí 12<br>779 00 Olomouc</address>
         <dl data-cms-list="hours">
           <dt>Po–Pá</dt><dd>7:30–20:00</dd>
           <dt>So</dt><dd>8:30–21:00</dd>
@@ -382,13 +382,48 @@ const CONTENT = fetch('content/site.json', {cache: 'no-cache'}).then(r => r.ok ?
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const txt = v => (v && v.text) || '';
   // one editable text: {text, color}; empty colour keeps the design's own
-  const tag = (name, v, attrs = '') => `<${name}${attrs}${v && v.color ? ` style="color:${esc(v.color)}"` : ''}>${esc(txt(v))}</${name}>`;
+  // optional look of one text: font, size (relative to the design), bold, italic, underline
+  const FONTS = {
+    gloock: ['"Gloock",Georgia,serif'],
+    jost: ['"Jost",system-ui,sans-serif', 'Jost:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700'],
+    playfair: ['"Playfair Display",Georgia,serif', 'Playfair+Display:ital,wght@0,400;0,700;1,400;1,700'],
+    cormorant: ['"Cormorant Garamond",Georgia,serif', 'Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700'],
+    lora: ['"Lora",Georgia,serif', 'Lora:ital,wght@0,400;0,700;1,400;1,700'],
+    montserrat: ['"Montserrat",system-ui,sans-serif', 'Montserrat:ital,wght@0,300;0,400;0,700;1,400;1,700'],
+    poppins: ['"Poppins",system-ui,sans-serif', 'Poppins:ital,wght@0,300;0,400;0,700;1,400;1,700'],
+    greatvibes: ['"Great Vibes",cursive', 'Great+Vibes'],
+    dancing: ['"Dancing Script",cursive', 'Dancing+Script:wght@400;700']
+  };
+  function look(v){
+    const css = [];
+    if(FONTS[v.font]) css.push('font-family:' + FONTS[v.font][0]);
+    if(+v.size > 0 && +v.size !== 1) css.push('font-size:' + (+v.size) + 'em');
+    if(v.bold) css.push('font-weight:700');
+    if(v.italic) css.push('font-style:italic');
+    if(v.underline) css.push('text-decoration:underline;text-underline-offset:.15em');
+    return css.join(';');
+  }
+  // the text itself; styled through an inner <cms-t> so the page's own span/em rules never touch it
+  function html(v){
+    const t = esc(txt(v)).replace(/\n/g, '<br>'), css = v ? look(v) : '';
+    return css ? `<cms-t style="${esc(css)}">${t}</cms-t>` : t;
+  }
+  function loadFonts(c){
+    const used = new Set(), walk = o => { if(o && typeof o === 'object'){ if(typeof o.font === 'string') used.add(o.font); Object.values(o).forEach(walk); } };
+    walk(c);
+    used.forEach(f => {
+      if(!FONTS[f] || !FONTS[f][1] || document.getElementById('font-' + f)) return;
+      const l = document.createElement('link');
+      l.id = 'font-' + f; l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=' + FONTS[f][1] + '&display=swap';
+      document.head.appendChild(l);
+    });
+  }
+  const tag = (name, v, attrs = '') => `<${name}${attrs}${v && v.color ? ` style="color:${esc(v.color)}"` : ''}>${html(v)}</${name}>`;
   function put(el, v){
     if(!v || typeof v !== 'object') return;
-    const t = txt(v);
-    if(el.hasAttribute('data-ml')) el.innerHTML = esc(t).replace(/\n/g, '<br>'); else el.textContent = t;
+    el.innerHTML = html(v);
     el.style.color = v.color || '';
-    if(el.hasAttribute('data-opt')) el.hidden = !t;
+    if(el.hasAttribute('data-opt')) el.hidden = !txt(v);
   }
   const LISTS = {
     'menu.col1.items': it => `<li><div>${tag('strong', it.name)}${txt(it.desc) ? tag('em', it.desc) : ''}</div><span class="dots"></span>${tag('span', it.price, ' class="price"')}</li>`,
@@ -398,6 +433,7 @@ const CONTENT = fetch('content/site.json', {cache: 'no-cache'}).then(r => r.ok ?
   LISTS['menu.col2.items'] = LISTS['menu.col1.items'];
   let live = false;
   function apply(c){
+    loadFonts(c);
     if(c.meta){
       if(c.meta.title) document.title = c.meta.title;
       if(c.meta.description) document.querySelector('meta[name="description"]').content = c.meta.description;

@@ -12,20 +12,74 @@ public_folder: /images/uploads
 # pro lokální test bez Netlify: odkomentujte a spusťte `npx decap-server`
 # local_backend: true
 
-# Každý text má dvě pole: Text a Barva textu.
-# Prázdná barva = barva podle designu webu.
+# Každý text: Text, Barva, Písmo, Velikost a přepínače Tučně / Kurzíva / Podtržené.
+# Nevyplněné = podle designu webu.
+x-f-color: &fColor { label: "Barva", name: color, widget: color, required: false, allowInput: true }
+x-f-font: &fFont
+  label: "Písmo"
+  name: font
+  widget: select
+  required: false
+  options:
+    - { label: "Gloock – patkové (nadpisy webu)", value: gloock }
+    - { label: "Jost – bezpatkové (text webu)", value: jost }
+    - { label: "Playfair Display – elegantní patkové", value: playfair }
+    - { label: "Cormorant Garamond – jemné patkové", value: cormorant }
+    - { label: "Lora – klasické patkové", value: lora }
+    - { label: "Montserrat – moderní bezpatkové", value: montserrat }
+    - { label: "Poppins – oblé bezpatkové", value: poppins }
+    - { label: "Great Vibes – psací", value: greatvibes }
+    - { label: "Dancing Script – ručně psané", value: dancing }
+x-f-size: &fSize
+  label: "Velikost"
+  name: size
+  widget: select
+  required: false
+  options:
+    - { label: "50 %", value: "0.5" }
+    - { label: "70 %", value: "0.7" }
+    - { label: "85 %", value: "0.85" }
+    - { label: "115 %", value: "1.15" }
+    - { label: "130 %", value: "1.3" }
+    - { label: "150 %", value: "1.5" }
+    - { label: "175 %", value: "1.75" }
+    - { label: "200 %", value: "2" }
+x-f-bold: &fBold { label: "Tučně", name: bold, widget: boolean, required: false }
+x-f-italic: &fItalic { label: "Kurzíva", name: italic, widget: boolean, required: false }
+x-f-underline: &fUnderline { label: "Podtržené", name: underline, widget: boolean, required: false }
+
 x-text: &text
   - { label: "Text", name: text, widget: string }
-  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+  - *fColor
+  - *fFont
+  - *fSize
+  - *fBold
+  - *fItalic
+  - *fUnderline
 x-para: &para
   - { label: "Text", name: text, widget: text }
-  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+  - *fColor
+  - *fFont
+  - *fSize
+  - *fBold
+  - *fItalic
+  - *fUnderline
 x-opt: &opt
   - { label: "Text", name: text, widget: string, required: false }
-  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+  - *fColor
+  - *fFont
+  - *fSize
+  - *fBold
+  - *fItalic
+  - *fUnderline
 x-optpara: &optpara
   - { label: "Text", name: text, widget: text, required: false }
-  - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
+  - *fColor
+  - *fFont
+  - *fSize
+  - *fBold
+  - *fItalic
+  - *fUnderline
 
 x-beat: &beat
   - { label: "Místo (malý nadpis)", name: where, widget: object, summary: "{{fields.text}}", fields: *opt }

@@ -46,3 +46,6 @@ body.dfk-editing [class*="-ControlPaneContainer"] textarea{min-height:84px !impo
 }
 /* the preview is the real website, Decap's scroll sync has nothing to sync */
 body.dfk-editing [class*="-ViewControls"] button:not([title="Přepnout náhled"]){display:none}
+/* sections with an empty required field */
+.dfk-nav button.err{color:#FFD9D2}
+.dfk-nav button.err::after{content:"";position:absolute;right:12px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#E5533D;box-shadow:0 0 0 3px rgba(229,83,61,.25)}

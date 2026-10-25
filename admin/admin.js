@@ -25,11 +25,50 @@ const store = {
       if(window.dfkPreviewGoto) window.dfkPreviewGoto(sec);
     }
   }
-  buttons.forEach(b => b.addEventListener('click', () => show(b.dataset.sec, true)));
+  buttons.forEach(b => b.addEventListener('click', () => { show(b.dataset.sec, true); if(b.classList.contains('err')) reveal(b.dataset.sec); }));
   show(current);
 
+  // a required field left empty may sit in a hidden section: mark it in the bar and jump there
+  let errKey = '';
+  function invalid(){
+    const secs = [];
+    document.querySelectorAll(PANE).forEach(c => {
+      const bad = [...c.querySelectorAll('[class*="ControlErrorsList"]')].find(ul => ul.textContent.trim());
+      const label = c.querySelector(':scope > [class*="-ControlTopbar"] > label');
+      if(bad && label) secs.push({sec: label.getAttribute('for').split('-field-')[0], el: bad});
+    });
+    return secs;
+  }
+  function reveal(sec){
+    const hit = invalid().find(s => s.sec === sec); if(!hit) return;
+    // open a collapsed list item that holds the empty field
+    const item = hit.el.closest('[class*="-ListItem"]');
+    if(item && !item.querySelector('input:not([type=hidden]), textarea')?.offsetParent){
+      const toggle = item.querySelector('[class*="-TopBarButton"]'); if(toggle) toggle.click();
+    }
+    setTimeout(() => {
+      const field = hit.el.closest('[class*="-ControlContainer"]');
+      (field || hit.el).scrollIntoView({block: 'center', behavior: 'smooth'});
+    }, 150);
+  }
+  function errors(){
+    const secs = invalid();
+    buttons.forEach(b => b.classList.toggle('err', secs.some(s => s.sec === b.dataset.sec)));
+    const key = secs.map(s => s.sec).join();
+    if(key && key !== errKey){
+      const first = secs.find(s => s.sec === current) || secs[0];
+      if(first.sec !== current) show(first.sec, true);
+      reveal(first.sec);
+    }
+    errKey = key;
+  }
+
   // the bar belongs to the entry editor only (not the login or collection screens)
-  const sync = () => document.body.classList.toggle('dfk-editing', !!document.querySelector('[class*="-EditorContainer"]'));
+  let queued = false;
+  const sync = () => {
+    document.body.classList.toggle('dfk-editing', !!document.querySelector('[class*="-EditorContainer"]'));
+    if(!queued){ queued = true; requestAnimationFrame(() => { queued = false; errors(); }); }
+  };
   new MutationObserver(sync).observe(document.body, {childList: true, subtree: true});
   sync();
   window.dfkCurrentSection = () => current;

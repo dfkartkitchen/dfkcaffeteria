@@ -396,21 +396,50 @@ const CONTENT = fetch('content/site.json', {cache: 'no-cache'}).then(r => r.ok ?
     'contact.lines': it => `<div>${tag('span', it.label)}${tag('p', it.value)}</div>`
   };
   LISTS['menu.col2.items'] = LISTS['menu.col1.items'];
-  CONTENT.then(c => {
-    if(c){
-      if(c.meta){
-        if(c.meta.title) document.title = c.meta.title;
-        if(c.meta.description) document.querySelector('meta[name="description"]').content = c.meta.description;
-      }
-      document.querySelectorAll('[data-cms]').forEach(el => put(el, get(c, el.dataset.cms)));
-      document.querySelectorAll('[data-cms-list]').forEach(el => {
-        const key = el.dataset.cmsList, items = get(c, key);
-        if(Array.isArray(items) && LISTS[key]) el.innerHTML = items.map(LISTS[key]).join('');
-      });
-      document.querySelectorAll('[data-cms-img]').forEach(el => { const g = get(c, el.dataset.cmsImg); if(g && g.alt) el.alt = g.alt; });
+  let live = false;
+  function apply(c){
+    if(c.meta){
+      if(c.meta.title) document.title = c.meta.title;
+      if(c.meta.description) document.querySelector('meta[name="description"]').content = c.meta.description;
     }
-    done();
-  });
+    document.querySelectorAll('[data-cms]').forEach(el => put(el, get(c, el.dataset.cms)));
+    document.querySelectorAll('[data-cms-list]').forEach(el => {
+      const key = el.dataset.cmsList, items = get(c, key);
+      if(Array.isArray(items) && LISTS[key]) el.innerHTML = items.map(LISTS[key]).join('');
+    });
+    // photos load lazily (see below); the live preview shows them straight away
+    document.querySelectorAll('[data-cms-img]').forEach(el => {
+      const g = get(c, el.dataset.cmsImg); if(!g) return;
+      if(g.alt) el.alt = g.alt;
+      if(g.image){ el.dataset.src = g.image; if(live) el.src = g.image; }
+    });
+  }
+  CONTENT.then(c => { if(c && !live) apply(c); done(); });
+
+  // live preview inside /admin: the CMS pushes unsaved edits here and asks to show a section
+  if(window.parent !== window && /[?&]cms-preview\b/.test(location.search)){
+    const film = document.getElementById('film');
+    const SPOT = {lead: '.lead', menu: '#nabidka', hours: '#navsteva', visit: '#navsteva', gallery: '#navsteva', 'gallery.facade': '#navsteva', footer: 'footer'};
+    const VIEW = {contact: '#kontakt', 'gallery.contact': '#kontakt', eshop: '#eshop'};
+    function go(key){
+      let y = 0;
+      const beat = /^beats\.(b\d)$/.exec(key) || (key === 'beats' && [, 'b1']);
+      if(beat){
+        const el = document.querySelector(`[data-cms="beats.${beat[1]}.title"]`).closest('.beat');
+        y = film.offsetTop + (+el.dataset.in + Math.min(1, +el.dataset.out)) / 2 * (film.offsetHeight - innerHeight);
+      } else if(SPOT[key]) y = document.querySelector(SPOT[key]).getBoundingClientRect().top + scrollY - 80;
+      scrollTo({top: y, behavior: 'auto'});
+    }
+    window.dfkPreview = {
+      apply(c){ live = true; apply(c); done(); },
+      goto(key){
+        const view = VIEW[key];
+        if(view){ if(location.hash !== view) location.hash = view; return; }
+        if(location.hash === '#kontakt' || location.hash === '#eshop'){ location.hash = ''; setTimeout(() => go(key), 120); }
+        else go(key);
+      }
+    };
+  }
 })();
 </script>
 <script>
@@ -446,7 +475,7 @@ const FORMAT = new Promise(res => {
       : Array.from({length: COUNT}, (_, i) => { const k = KEYS.reduce((a, b) => Math.abs(b - i) < Math.abs(a - i) ? b : a); return 'fallback/f_' + pad(k) + '.webp'; });
   load(0).then(() => { draw(); const order=[]; for(let s of [8,4,2,1]) for(let i=0;i<N;i+=s) if(!order.includes(i)&&i) order.push(i); (async()=>{ for(let k=0;k<order.length;k+=6) await Promise.all(order.slice(k,k+6).map(load)); })(); });
   });
-  CONTENT.then(c => { document.getElementById('facade').src = (c && c.gallery && c.gallery.facade && c.gallery.facade.image) || IMG(0.28); });
+  CONTENT.then(() => { const im = document.getElementById('facade'); if(!im.getAttribute('src')) im.src = im.dataset.src || IMG(0.28); });
 
   function nearest(i){ if(imgs[i]) return imgs[i]; for(let d=1; d<N; d++){ if(imgs[i-d]) return imgs[i-d]; if(imgs[i+d]) return imgs[i+d]; } return null; }
   function cover(im, a){
@@ -499,7 +528,7 @@ const FORMAT = new Promise(res => {
   const view = document.getElementById('kontakt'), back = document.getElementById('back');
   let imgSet = false;
   function open(){
-    if(!imgSet){ CONTENT.then(c => { document.getElementById('contact-img').src = (c && c.gallery && c.gallery.contact && c.gallery.contact.image) || IMG(0.66); }); imgSet = true; }
+    if(!imgSet){ CONTENT.then(() => { const im = document.getElementById('contact-img'); if(!im.getAttribute('src')) im.src = im.dataset.src || IMG(0.66); }); imgSet = true; }
     view.hidden = false; view.scrollTop = 0; document.body.style.overflow = 'hidden'; back.focus({preventScroll:true});
   }
   function close(){

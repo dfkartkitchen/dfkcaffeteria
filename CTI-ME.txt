@@ -4,7 +4,8 @@ DFK Caffetteria – web se scroll animací (verze pro vlastní hosting)
 OBSAH SLOŽKY
   index.html        celý web (HTML, styly a skript v jednom souboru, cca 33 kB)
   content/site.json texty, barvy textů a fotky (upravuje se přes /admin)
-  admin/            administrace Decap CMS (index.html + config.yml)
+  admin/            administrace Decap CMS (index.html, config.yml,
+                    admin.js + admin.css = lišta a živý náhled)
   images/uploads/   fotky nahrané přes administraci
   desktop/avif/     121 snímků průletu pro počítač, formát AVIF (cca 5 MB)
   mobile/avif/      121 snímků na výšku pro mobil, AVIF (cca 2,6 MB)
@@ -36,6 +37,9 @@ TESTOVÁNÍ NA POČÍTAČI
   Texty, barvy textů a fotky se upravují v administraci na adrese
     https://VAS-WEB.netlify.app/admin/
   Data jsou v souboru content/site.json, web si je při načtení přečte.
+  V administraci je vlevo lišta se sekcemi webu, uprostřed formulář
+  a vpravo živý náhled skutečného webu (přepínač Počítač / Mobil).
+  Náhled ukazuje i neuložené změny a sám se posune k upravované části.
   Každý text má pole „Text“ a „Barva textu“ (prázdná barva = barva podle
   designu). Nahrané fotky se ukládají do images/uploads.
   Popisky během průletu: data-in / data-out (kdy se popisek ukáže, 0 až 1)

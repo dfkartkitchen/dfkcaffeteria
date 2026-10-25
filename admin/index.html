@@ -5,9 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Správa obsahu – DFK Caffetteria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+  <!-- left bar: one item per section of content/site.json; shown only in the editor -->
+  <nav class="dfk-nav" id="dfk-nav" aria-label="Sekce webu">
+    <a class="dfk-mark" href="../" target="_blank" rel="noopener" title="Otevřít web v nové záložce"><b>DFK</b><span>CAFFETTERIA</span><i></i></a>
+    <p class="dfk-group">Úvodní stránka</p>
+    <button type="button" data-sec="header">Horní lišta</button>
+    <button type="button" data-sec="hero">Úvod (velký nápis)</button>
+    <button type="button" data-sec="beats">Popisky během průletu</button>
+    <button type="button" data-sec="route">Kapitoly (tečky vpravo)</button>
+    <button type="button" data-sec="lead">Text o kavárně</button>
+    <button type="button" data-sec="menu">Nabídka a ceny</button>
+    <button type="button" data-sec="visit">Kde nás najdete</button>
+    <button type="button" data-sec="hours">Otevírací doba</button>
+    <button type="button" data-sec="footer">Patička</button>
+    <p class="dfk-group">Podstránky</p>
+    <button type="button" data-sec="contact">Stránka Kontakt</button>
+    <button type="button" data-sec="eshop">Stránka E-shop</button>
+    <p class="dfk-group">Společné</p>
+    <button type="button" data-sec="gallery">Fotky</button>
+    <button type="button" data-sec="brand">Logo</button>
+    <button type="button" data-sec="meta">Záložka prohlížeče a vyhledávače</button>
+    <p class="dfk-help">Změny vidíte hned v náhledu vpravo. Na web se dostanou až po kliknutí na <b>Publikovat</b>.</p>
+  </nav>
+  <style id="dfk-sec-style"></style>
   <script src="https://unpkg.com/decap-cms@3.16.3/dist/decap-cms.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>

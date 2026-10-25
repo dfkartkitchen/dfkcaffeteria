@@ -1,0 +1,48 @@
+/* DFK Caffetteria – look of the Decap CMS administration */
+:root{
+  --dfk-green:#0F1C11; --dfk-green-2:#17291A; --dfk-brass:#C19A5B; --dfk-brass-soft:#D9BD8C;
+  --dfk-cream:#F1E7D6; --dfk-cream-dim:rgba(241,231,214,.66); --dfk-nav:256px;
+}
+body{font-family:Jost,"Segoe UI",system-ui,sans-serif}
+
+/* left bar */
+.dfk-nav{display:none;position:fixed;inset:0 auto 0 0;width:var(--dfk-nav);z-index:300;overflow-y:auto;
+  background:radial-gradient(140% 50% at 0% 0%,var(--dfk-green-2),var(--dfk-green) 70%);color:var(--dfk-cream);
+  padding:22px 14px 28px;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(241,231,214,.2) transparent}
+body.dfk-editing .dfk-nav{display:block}
+.dfk-mark{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--dfk-cream);line-height:1;margin:0 0 22px}
+.dfk-mark b{font-family:Gloock,Georgia,serif;font-weight:400;font-size:28px;letter-spacing:.02em}
+.dfk-mark span{font-size:9px;font-weight:500;letter-spacing:.42em;padding-left:.42em;margin-top:5px}
+.dfk-mark i{display:block;width:22px;height:1px;background:currentColor;margin-top:6px;opacity:.8}
+.dfk-group{margin:18px 10px 6px;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dfk-brass-soft)}
+.dfk-nav button{display:block;width:100%;text-align:left;font:inherit;font-size:14.5px;color:var(--dfk-cream-dim);background:transparent;
+  border:0;border-radius:8px;padding:8px 10px 8px 14px;cursor:pointer;position:relative;transition:background .15s,color .15s}
+.dfk-nav button:hover{background:rgba(241,231,214,.07);color:var(--dfk-cream)}
+.dfk-nav button.on{background:rgba(193,154,91,.16);color:var(--dfk-cream)}
+.dfk-nav button.on::before{content:"";position:absolute;left:4px;top:9px;bottom:9px;width:3px;border-radius:3px;background:var(--dfk-brass)}
+.dfk-nav button:focus-visible{outline:2px solid var(--dfk-brass);outline-offset:1px}
+.dfk-help{margin:24px 10px 0;padding-top:16px;border-top:1px solid rgba(241,231,214,.12);font-size:12.5px;line-height:1.5;color:var(--dfk-cream-dim)}
+.dfk-help b{color:var(--dfk-cream);font-weight:500}
+
+/* make room for the bar; the editor fills the rest of the screen */
+body.dfk-editing [class*="-EditorContainer"]{position:fixed !important;inset:0 0 0 var(--dfk-nav) !important;width:auto !important;min-width:0 !important}
+
+/* editor in the café's colours */
+body.dfk-editing [class*="-ToolbarContainer"]{border-bottom:1px solid #E4DDCF}
+body.dfk-editing [class*="-ControlPaneContainer"]{font-family:Jost,"Segoe UI",system-ui,sans-serif}
+body.dfk-editing [class*="-ControlPaneContainer"] > [class*="-ControlContainer"] > [class*="-ControlTopbar"] > label{
+  font-family:Gloock,Georgia,serif;font-size:24px;font-weight:400;letter-spacing:0;text-transform:none;
+  background:transparent;color:var(--dfk-green);padding:4px 0 10px}
+
+/* compact form: no grey bars on nested groups (lists keep theirs for the add button) */
+body.dfk-editing [class*="-ControlPaneContainer"] [class*="-TopBarContainer"]:not(:has([class*="-AddButton"])){display:none}
+/* text and its colour side by side */
+body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [class*="-ControlContainer"] > [class*="ColorSwatch"]){
+  display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:0 14px;align-items:start}
+body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [class*="-ControlContainer"] > [class*="ColorSwatch"]) > *{margin-top:0 !important}
+body.dfk-editing [class*="-ControlPaneContainer"] textarea{min-height:84px !important}
+@media (max-width:1300px){
+  body.dfk-editing [class*="-ControlPaneContainer"] div:has(> [class*="-ControlContainer"] > [class*="ColorSwatch"]){grid-template-columns:1fr}
+}
+/* the preview is the real website, Decap's scroll sync has nothing to sync */
+body.dfk-editing [class*="-ViewControls"] button:not([title="Přepnout náhled"]){display:none}

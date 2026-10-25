@@ -114,11 +114,11 @@
   },
   "gallery": {
     "facade": {
-      "image": "fallback/f_035.webp",
+      "image": "/fallback/f_035.webp",
       "alt": "Žluté barokní průčelí kavárny DFK Caffetteria s ořechovými dveřmi"
     },
     "contact": {
-      "image": "fallback/f_080.webp",
+      "image": "/fallback/f_080.webp",
       "alt": "Bar kavárny DFK Caffetteria s vitrínou zákusků"
     }
   }

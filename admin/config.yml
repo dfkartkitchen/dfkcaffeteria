@@ -21,10 +21,10 @@ x-para: &para
   - { label: "Text", name: text, widget: text }
   - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
 x-opt: &opt
-  - { label: "Text (nepovinný)", name: text, widget: string, required: false }
+  - { label: "Text", name: text, widget: string, required: false }
   - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
 x-optpara: &optpara
-  - { label: "Text (nepovinný)", name: text, widget: text, required: false }
+  - { label: "Text", name: text, widget: text, required: false }
   - { label: "Barva textu", name: color, widget: color, required: false, allowInput: true }
 
 x-beat: &beat
@@ -45,7 +45,7 @@ x-menu-items: &menuItems
 collections:
   - name: web
     label: "Obsah webu"
-    editor: { preview: false }
+    editor: { preview: true }
     files:
       - name: site
         label: "Texty a fotky"
@@ -54,7 +54,6 @@ collections:
           - label: "Záložka prohlížeče a vyhledávače"
             name: meta
             widget: object
-            collapsed: true
             fields:
               - { label: "Titulek stránky", name: title, widget: string }
               - { label: "Popis pro Google", name: description, widget: text }
@@ -62,7 +61,6 @@ collections:
           - label: "Logo"
             name: brand
             widget: object
-            collapsed: true
             fields:
               - { label: "Název (velké písmo)", name: name, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Podtitul (malé písmo)", name: tagline, widget: object, summary: "{{fields.text}}", fields: *text }
@@ -70,7 +68,6 @@ collections:
           - label: "Horní lišta"
             name: header
             widget: object
-            collapsed: true
             fields:
               - { label: "Tlačítko E-shop", name: eshop, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Tlačítko rezervace", name: book, widget: object, summary: "{{fields.text}}", fields: *text }
@@ -78,7 +75,6 @@ collections:
           - label: "Úvod (velký nápis)"
             name: hero
             widget: object
-            collapsed: true
             fields:
               - { label: "Hlavní nápis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Podnápis", name: subtitle, widget: object, summary: "{{fields.text}}", fields: *text }
@@ -88,19 +84,17 @@ collections:
           - label: "Popisky během průletu"
             name: beats
             widget: object
-            collapsed: true
             fields:
-              - { label: "1 – Náměstí", name: b1, widget: object, collapsed: true, fields: *beat }
-              - { label: "2 – Průčelí", name: b2, widget: object, collapsed: true, fields: *beat }
-              - { label: "3 – Interiér", name: b3, widget: object, collapsed: true, fields: *beat }
-              - { label: "4 – Bar", name: b4, widget: object, collapsed: true, fields: *beat }
-              - { label: "5 – Káva", name: b5, widget: object, collapsed: true, fields: *beat }
-              - { label: "6 – Závěr", name: b6, widget: object, collapsed: true, fields: *beat }
+              - { label: "1 – Náměstí", name: b1, widget: object, fields: *beat }
+              - { label: "2 – Průčelí", name: b2, widget: object, fields: *beat }
+              - { label: "3 – Interiér", name: b3, widget: object, fields: *beat }
+              - { label: "4 – Bar", name: b4, widget: object, fields: *beat }
+              - { label: "5 – Káva", name: b5, widget: object, fields: *beat }
+              - { label: "6 – Závěr", name: b6, widget: object, fields: *beat }
 
           - label: "Kapitoly (tečky vpravo)"
             name: route
             widget: object
-            collapsed: true
             fields:
               - { label: "Kapitola 1", name: r1, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Kapitola 2", name: r2, widget: object, summary: "{{fields.text}}", fields: *text }
@@ -112,7 +106,6 @@ collections:
           - label: "Text o kavárně"
             name: lead
             widget: object
-            collapsed: true
             fields:
               - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Odstavec", name: text, widget: object, summary: "{{fields.text}}", fields: *para }
@@ -120,7 +113,6 @@ collections:
           - label: "Nabídka a ceny"
             name: menu
             widget: object
-            collapsed: true
             fields:
               - label: "Levý sloupec"
                 name: col1
@@ -146,7 +138,6 @@ collections:
           - label: "Kde nás najdete"
             name: visit
             widget: object
-            collapsed: true
             fields:
               - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Adresa (každý řádek zvlášť)", name: address, widget: object, summary: "{{fields.text}}", fields: *para }
@@ -155,7 +146,6 @@ collections:
           - label: "Patička"
             name: footer
             widget: object
-            collapsed: true
             fields:
               - { label: "Vlevo", name: left, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Vpravo", name: right, widget: object, summary: "{{fields.text}}", fields: *text }
@@ -163,7 +153,6 @@ collections:
           - label: "Stránka Kontakt"
             name: contact
             widget: object
-            collapsed: true
             fields:
               - { label: "Tlačítko zpět", name: back, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
@@ -180,7 +169,6 @@ collections:
           - label: "Stránka E-shop"
             name: eshop
             widget: object
-            collapsed: true
             fields:
               - { label: "Nadpis", name: title, widget: object, summary: "{{fields.text}}", fields: *text }
               - { label: "Odstavec", name: text, widget: object, summary: "{{fields.text}}", fields: *para }
@@ -189,7 +177,6 @@ collections:
           - label: "Fotky"
             name: gallery
             widget: object
-            collapsed: true
             fields:
               - label: "Fotka průčelí (sekce Kde nás najdete)"
                 name: facade
